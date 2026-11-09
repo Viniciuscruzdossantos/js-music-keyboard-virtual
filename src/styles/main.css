@@ -1,0 +1,196 @@
+:root { --kw: 70px; }
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 12px;
+  background-color: #e3f2fd;
+  color: #fff;
+}
+
+.container {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 20px;
+  padding: 35px 40px;
+  background-color: black;
+}
+
+.container header {
+  color: #b2b2b2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header h2 { font-size: 1.6rem; }
+
+header .column { display: flex; align-items: center; }
+
+header .column span {
+  font-weight: 500;
+  margin-right: 15px;
+  font-size: 1.19rem;
+}
+
+.volume-slider input { accent-color: #fff; }
+
+.keys-check input,
+.notes-check input {
+  width: 60px;
+  height: 30px;
+  appearance: none;
+  border-radius: 30px;
+  background-color: #4b4b4b;
+  cursor: pointer;
+  position: relative;
+}
+
+.keys-check input::before,
+.notes-check input::before {
+  content: "";
+  height: 20px;
+  width: 20px;
+  background-color: #8c8c8c;
+  top: 50%;
+  left: 0.3rem;
+  border-radius: inherit;
+  position: absolute;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+.keys-check input:checked::before,
+.notes-check input:checked::before {
+  left: 2.1rem;
+  background-color: #fff;
+}
+
+/* ===== Teclado ===== */
+.piano-keys {
+  display: flex;
+  margin-top: 40px;
+  touch-action: none;
+}
+
+.piano-keys .key {
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  color: #a2a2a2;
+  position: relative;
+  text-transform: uppercase;
+  transition: box-shadow 0.1s, background 0.1s;
+}
+
+.piano-keys .white {
+  width: var(--kw);
+  height: calc(var(--kw) * 3.3);
+  border: 1px solid black;
+  border-radius: 8px;
+  background: linear-gradient(#fff 96%, #eee 4%);
+}
+
+.piano-keys .black {
+  width: calc(var(--kw) * 0.63);
+  height: calc(var(--kw) * 2);
+  z-index: 2;
+  margin: 0 calc(var(--kw) * -0.315);
+  border: 1px solid black;
+  border-radius: 0 0 5px 5px;
+  background: linear-gradient(#333, #000);
+}
+
+.piano-keys span {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 1.13rem;
+}
+
+.piano-keys em {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.7rem;
+  font-style: normal;
+  text-transform: none;
+  opacity: 0.85;
+}
+
+/* tecla apertada: cada nota brilha com uma cor */
+.piano-keys .white.active {
+  box-shadow: inset -5px 5px 20px rgba(0, 0, 0, 0.2), 0 0 22px hsl(var(--hue) 90% 60% / 0.8);
+  background: linear-gradient(to bottom, hsl(var(--hue) 90% 88%) 0%, #eee 100%);
+}
+
+.piano-keys .black.active {
+  box-shadow: inset -5px 5px 10px rgba(255, 255, 255, 0.1), 0 0 22px hsl(var(--hue) 90% 60% / 0.8);
+  background: linear-gradient(to bottom, #000, hsl(var(--hue) 60% 35%));
+}
+
+.piano-keys.hide-letters span { display: none; }
+.piano-keys.hide-notes em { display: none; }
+
+/* notas que sobem */
+.pop {
+  position: absolute;
+  top: 10px;
+  pointer-events: none;
+  font-size: 1.3rem;
+  color: hsl(var(--hue) 90% 55%);
+  animation: float 0.9s ease-out forwards;
+}
+@keyframes float { to { transform: translateY(-70px); opacity: 0; } }
+
+/* aula: tecla da vez e erro */
+.piano-keys .key.target { animation: pulse 0.8s infinite alternate; }
+@keyframes pulse { to { box-shadow: 0 0 0 4px #2ea043, 0 0 24px #2ea043; } }
+.piano-keys .key.wrong { animation: shake 0.3s; box-shadow: 0 0 0 3px #e5484d; }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* ===== Controles ===== */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  justify-content: space-between;
+  margin-top: 26px;
+}
+.controls .group { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.controls button,
+.controls select {
+  background: #1d1d1d;
+  color: #d0d0d0;
+  border: 1px solid #4b4b4b;
+  border-radius: 30px;
+  padding: 9px 18px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.controls select { max-width: 220px; border-radius: 10px; }
+.controls button:hover:not(:disabled) { background: #fff; color: #000; }
+.controls button:disabled { opacity: 0.35; cursor: not-allowed; }
+.controls button.on { background: #e5484d; color: #fff; border-color: #e5484d; }
+.controls button:focus-visible, .controls select:focus-visible, .piano-keys .key:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+#status { margin-top: 18px; min-height: 1.5em; color: #b2b2b2; font-size: 0.95rem; }
+
+/* ===== Celular ===== */
+@media (max-width: 860px) {
+  :root { --kw: min(70px, calc((100vw - 64px) / 10)); }
+  .container { padding: 22px 20px; }
+  .piano-keys { margin-top: 28px; }
+  .piano-keys span { font-size: 0.8rem; bottom: 10px; }
+  .piano-keys em { font-size: 0.55rem; bottom: 30px; }
+  header h2 { font-size: 1.3rem; }
+  header .column span { font-size: 1rem; margin-right: 8px; }
+}
